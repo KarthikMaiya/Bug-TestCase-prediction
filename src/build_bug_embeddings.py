@@ -8,6 +8,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+import torch
 from sentence_transformers import SentenceTransformer
 
 from config import setup_logging
@@ -96,6 +97,17 @@ def main() -> None:
 
     logger = setup_logging()
     start_time = time.perf_counter()
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    print(f"torch.cuda.is_available(): {torch.cuda.is_available()}")
+    print(f"Using device: {device}")
+    if device == "cuda":
+        print(f"GPU: {torch.cuda.get_device_name(0)}")
+
+    logger.info("torch.cuda.is_available(): %s", torch.cuda.is_available())
+    logger.info("Selected device: %s", device)
+    if device == "cuda":
+        logger.info("GPU name: %s", torch.cuda.get_device_name(0))
 
     logger.info("Loading master dataset from %s", args.input)
     df = load_master_dataset(args.input)
@@ -109,12 +121,15 @@ def main() -> None:
     bug_metadata[BUG_ID_COLUMN] = bug_metadata[BUG_ID_COLUMN].astype(int)
     bug_metadata["bug_text"] = bug_metadata.apply(build_bug_text, axis=1)
 
-    model = SentenceTransformer(args.model_name)
+    model = SentenceTransformer(args.model_name, device=device)
     texts: List[str] = bug_metadata["bug_text"].tolist()
+    logger.info("Total texts: %s", len(texts))
+    logger.info("Batch size: %s", 32)
     embeddings = model.encode(
         texts,
         batch_size=32,
         show_progress_bar=True,
+        convert_to_numpy=True,
         normalize_embeddings=True,
     )
 
