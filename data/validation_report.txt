@@ -1,0 +1,23 @@
+BUG VALIDATION
+rows: 9221
+duplicate bug_id count: 0
+empty bug_title count: 114
+missing bug_description count: 6561
+null percentages: {'bug_id': 0.0, 'bug_title': 1.24, 'bug_description': 71.15, 'bug_tags': 7.75, 'priority': 66.39, 'severity': 4.4, 'area_path': 0.0, 'iteration_path': 0.0, 'state': 0.0}
+
+TEST CASE VALIDATION
+rows: 9894
+duplicate testcase_id count: 0
+empty testcase_title count: 0
+missing testcase_description count: 5807
+null percentages: {'testcase_id': 0.0, 'testcase_title': 0.0, 'testcase_description': 58.69, 'test_steps': 17.16, 'expected_results': 62.36, 'preconditions': 100.0}
+
+MASTER DATASET VALIDATION
+rows: 5187
+duplicate bug_id count: 1359
+duplicate testcase_id count: 3449
+empty bug_title count: 61
+empty testcase_title count: 0
+missing bug_description count: 3845
+missing testcase_description count: 632
+null percentages: {'bug_id': 0.0, 'bug_title': 1.18, 'bug_description': 74.13, 'bug_tags': 5.51, 'priority': 61.71, 'severity': 4.09, 'testcase_id': 0.0, 'testcase_title': 0.0, 'testcase_description': 12.18, 'test_steps': 1.16}
