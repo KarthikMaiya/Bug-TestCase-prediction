@@ -22,6 +22,75 @@ BUG_ID_COLUMN = "bug_id"
 BUG_TEXT_COLUMNS = ["bug_title", "bug_tags", "severity", "bug_description"]
 
 
+def normalize_bug_title(title: object) -> str:
+    """Normalize bug titles:
+
+    - lowercase
+    - remove testcase numbers / IDs (tokens containing both digits and letters like 'TC123' or leading digits)
+    - remove standalone numeric tokens
+    - collapse whitespace
+    """
+    import re
+
+    if title is None or pd.isna(title):
+        return ""
+    s = str(title).strip().lower()
+    # remove tokens that are purely numeric
+    tokens = [t for t in re.split(r"\s+", s) if t]
+    cleaned_tokens = []
+    for t in tokens:
+        # remove tokens that are pure numbers
+        if re.fullmatch(r"\d+", t):
+            continue
+        # remove tokens that are testcase ids like 'TC123' or '66804'
+        if re.search(r"\d", t) and re.search(r"[a-zA-Z]", t):
+            # keep tokens like 'tc' but drop digits inside
+            t = re.sub(r"\d+", "", t)
+            if not t:
+                continue
+        cleaned_tokens.append(t)
+    normalized = " ".join(cleaned_tokens)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return normalized
+
+
+def build_enriched_bug_text(row: pd.Series) -> str:
+    """Build enriched representation for embedding and query.
+
+    Format:
+    Normalized Title: ...
+    Original Title: ...
+    Tags: ...
+    Severity: ...
+    Description: ...
+
+    Also append optional metadata tokens such as [SEV_HIGH] and [TAG_TEAM2]
+    """
+    title = normalize_text(row.get("bug_title"))
+    normalized_title = normalize_bug_title(title)
+    tags = normalize_text(row.get("bug_tags"))
+    severity = normalize_text(row.get("severity"))
+    description = normalize_text(row.get("bug_description"))
+
+    parts = [f"Normalized Title: {normalized_title}", f"Original Title: {title}", f"Tags: {tags}", f"Severity: {severity}", f"Description: {description}"]
+
+    # metadata tokens
+    token_parts = []
+    if severity:
+        sev_token = f"[SEV_{severity.upper().replace(' ', '_')}]"
+        token_parts.append(sev_token)
+    if tags:
+        # assume comma-separated tags
+        for tag in [t.strip() for t in tags.split(",") if t.strip()]:
+            tag_token = f"[TAG_{tag.upper().replace(' ', '_')}]"
+            token_parts.append(tag_token)
+
+    if token_parts:
+        parts.append(" ".join(token_parts))
+
+    return "\n".join(parts)
+
+
 def normalize_text(value: object) -> str:
     if value is None or pd.isna(value):
         return ""
@@ -119,10 +188,12 @@ def main() -> None:
 
     bug_metadata = bugs[[BUG_ID_COLUMN, *BUG_TEXT_COLUMNS]].copy()
     bug_metadata[BUG_ID_COLUMN] = bug_metadata[BUG_ID_COLUMN].astype(int)
-    bug_metadata["bug_text"] = bug_metadata.apply(build_bug_text, axis=1)
+    # add normalized title and enriched text
+    bug_metadata["normalized_bug_title"] = bug_metadata["bug_title"].apply(normalize_bug_title)
+    bug_metadata["bug_text_enriched"] = bug_metadata.apply(build_enriched_bug_text, axis=1)
 
     model = SentenceTransformer(args.model_name, device=device)
-    texts: List[str] = bug_metadata["bug_text"].tolist()
+    texts: List[str] = bug_metadata["bug_text_enriched"].tolist()
     logger.info("Total texts: %s", len(texts))
     logger.info("Batch size: %s", 32)
     embeddings = model.encode(
@@ -140,6 +211,7 @@ def main() -> None:
     args.metadata_output.parent.mkdir(parents=True, exist_ok=True)
 
     np.save(args.embeddings_output, embeddings)
+    # save enriched metadata so downstream components can use normalized titles and enriched text
     bug_metadata.to_csv(args.metadata_output, index=False)
 
     logger.info("Saved embeddings to %s", args.embeddings_output)

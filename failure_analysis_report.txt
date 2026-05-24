@@ -1,0 +1,73 @@
+Total evaluated bugs: 3828
+Total failures (hit@10==0): 1937
+Failure rate percent: 50.60%
+
+Top failed ground-truth testcase ids:
+- 252477: 10
+- 441336: 9
+- 208322: 8
+- 188413: 8
+- 96685: 7
+- 204223: 7
+- 252740: 7
+- 252114: 7
+- 268379: 7
+- 340579: 7
+
+Percent failures with missing description: 74.29%
+
+Failure severity distribution:
+- 3 - Medium: 697
+- 2 - High: 645
+- 1 - Critical: 386
+- 4 - Low: 147
+- <missing>: 62
+
+Common title tokens:
+- not: 776
+- platon: 524
+- the: 335
+- for: 285
+- part: 280
+- revision: 201
+- and: 175
+- missing: 145
+- eco: 136
+- error: 135
+- available: 125
+- structure: 123
+- data: 122
+- with: 120
+- are: 112
+- object: 100
+- test: 100
+- usage: 95
+- validation: 93
+- after: 91
+
+Inferred likely causes (heuristic):
+- sparse metadata: score 1
+- duplicate/generic title: score 1
+- semantic retrieval miss: score 1
+
+Representative failures (first 20):
+Bug 175899: While initiate CAD_Start_Part_Release Worfklow getting error | severity=3 - Medium | ground_truth=[62054, 84285, 180308, 197181, 476904] | predicted=[334895, 87041, 336002, 96685, 180376, 180356, 175602, 84114, 180306, 194787]
+Bug 102920: 66804 TC cannot be carried out by us | severity=nan | ground_truth=[66804] | predicted=[84869, 180325, 84818, 180323, 203979, 85717, 66714, 180302, 97079, 180378]
+Bug 101622: Writeaccess for viewer | severity=3 - Medium | ground_truth=[84869, 180325] | predicted=[85327, 180341, 197551, 84572, 180314, 84818, 203979, 180323, 86581, 180353]
+Bug 101663: 84946 - Relationship for DMU without respecting the writing rights (ARR Owner is Susanne M.) | severity=3 - Medium | ground_truth=[84946, 180331] | predicted=[180325, 84869, 180341, 85327, 197551, 84818, 180323, 203979, 84572, 180314]
+Bug 103131: 87726 Generate design related neutral file formats | severity=4 - Low | ground_truth=[87726] | predicted=[83663, 84818, 180323, 203979, 84869, 180325, 197551, 180341, 85327, 84572]
+Bug 102287: 84959 Editing the Product structure element with custom 'In change' status | severity=3 - Medium | ground_truth=[84959, 180333] | predicted=[84912, 180328, 84081, 106478, 180389, 85735, 180348, 87041, 180356, 85327]
+Bug 102464: 84941 Element has disappeared but still a blue symbol is there | severity=3 - Medium | ground_truth=[84941, 180330] | predicted=[86581, 180353, 84912, 180328, 180323, 84818, 203979, 84869, 180325, 85717]
+Bug 102771: 96759 Attach and verify Revision Effectivity | severity=3 - Medium | ground_truth=[96759] | predicted=[84818, 180323, 203979, 180328, 84912, 85327, 197551, 180341, 180353, 86581]
+Bug 102776: Saved Variant Rule (SVR) configuration for the Product structure Failed: Guided mode cannot be tested | severity=3 - Medium | ground_truth=[85447, 180342] | predicted=[180389, 106478, 180328, 84912, 180382, 104652, 84081, 316551, 87041, 84818]
+Bug 107486: problem while entering part number | severity=nan | ground_truth=[84285, 180308, 197181] | predicted=[84572, 180314, 105317, 180385, 87041, 180356, 104652, 180382, 84676, 180318]
+Bug 106898: Check for integrity of partnumber | severity=3 - Medium | ground_truth=[84383, 175601, 180309] | predicted=[84912, 180328, 105317, 105245, 180384, 84285, 180308, 197181, 180302, 66714]
+Bug 184783: write access denied on ECO- while initiating workflows | severity=2 - High | ground_truth=[84390] | predicted=[96685, 334331, 177462, 334895, 180376, 336002, 207516, 98160, 244317, 84624]
+Bug 102768: Migrated data is not able to visualize in integrated viewer | severity=3 - Medium | ground_truth=[84417, 180312] | predicted=[83668, 85717, 180347, 91197, 84869, 180325, 87041, 85657, 84818, 180323]
+Bug 160658: Overview page is showing "Name" property twice for Part/Assembly Design for search result. | severity=nan | ground_truth=[84440, 180313] | predicted=[83668, 231155, 180385, 105317, 162506, 94582, 180369, 305344, 84081, 84114]
+Bug 101577: Problem 84572 creation dialog standard part design | severity=3 - Medium | ground_truth=[84572, 180314] | predicted=[175602, 85327, 180341, 197551, 84114, 180306, 84818, 180323, 203979, 83663]
+Bug 101842: 84572 Submit to WF appears | severity=3 - Medium | ground_truth=[84572, 180314] | predicted=[85327, 180341, 197551, 84869, 180325, 84912, 180328, 203979, 84818, 180323]
+Bug 109390: Delete Access is showing as "Deny" for Owning user of an object | severity=nan | ground_truth=[84624, 180315] | predicted=[180328, 84912, 105317, 180385, 180318, 84676, 87041, 106478, 180389, 180356]
+Bug 163006: Not able to add Geometry object as child to Part/Assembly object. | severity=nan | ground_truth=[84629, 180317] | predicted=[175602, 84114, 180306, 85248, 180351, 86193, 207370, 200474, 200641, 200406]
+Bug 107757: NX save manager wants to save too many components (more than were changed) | severity=2 - High | ground_truth=[84683, 180319] | predicted=[105317, 180385, 180389, 106478, 180328, 84912, 84676, 180318, 84285, 180308]
+Bug 102740: Vis of Element Effectivity | severity=3 - Medium | ground_truth=[84686] | predicted=[180353, 86581, 197551, 85327, 180341, 84869, 180325, 84818, 180323, 203979]
